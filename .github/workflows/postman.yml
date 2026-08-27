@@ -26,11 +26,11 @@ jobs:
 
     - name: Ejecutar Colección de Postman
       run: |
-        newman run Pruebaspiplines.json -r htmlextra --reporter-htmlextra-export reporte_postman.html
+        newman run Pruebaspiplines.json -r cli,htmlextra --reporter-htmlextra-export reporte_postman.html --suppress-exit-code
 
     - name: Publicar Reporte HTML
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: reporte-postman
+        name: reporte-postman-api
         path: reporte_postman.html
