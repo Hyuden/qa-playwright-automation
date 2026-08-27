@@ -1,0 +1,36 @@
+name: QA API Testing con Postman y Newman
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Instalar Newman y HTMLExtra
+      run: |
+        npm install -g newman
+        npm install -g newman-reporter-htmlextra
+
+    - name: Ejecutar Colección de Postman
+      run: |
+        newman run Pruebaspiplines.json -r htmlextra --reporter-htmlextra-export reporte_postman.html
+
+    - name: Publicar Reporte HTML
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: reporte-postman
+        path: reporte_postman.html
